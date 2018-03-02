@@ -55,3 +55,4 @@ More to come
 Other thoughts
 * add inversions to chords
 * consider weighting everything based on quanta & 1-quanta
+* have a corpus of jazz standards to borrow phrases from

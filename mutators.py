@@ -9,13 +9,15 @@ def pickRandomChordTone(currentPiece, chordProgression, measureIndex, noteIndex)
 
     new_midi_note = choice(chordProgression[measureIndex])
 
+    delta = original_midi_note - new_midi_note
+    while abs(delta) > 6:
+        # try to bring them closer together
+        if delta < 0:
+            new_midi_note -= 12
+        else:
+            new_midi_note += 12
 
-    p = random()
-
-    if p < 0.25 and new_midi_note > 12:
-        new_midi_note -= 12
-    elif p < 0.5 and new_midi_note < 256-12:
-        new_midi_note += 12
+        delta = original_midi_note - new_midi_note
 
     currentPiece[measureIndex][noteIndex].midi_note = new_midi_note
     return True
