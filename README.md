@@ -1,6 +1,10 @@
 # Jamnetic Algorhythms
 Using Genetic Algorithms to improvise
 
+## Usage
+Must use python 3.6
+More to come
+
 ## Algorithm Thoughts
 * GAs for jazz standard - all of me
     * melody only tho, but maintain info about chord progressions

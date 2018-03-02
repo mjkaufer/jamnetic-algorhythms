@@ -7,6 +7,7 @@ measures_to_change_per_mutation = 4
 max_attempts = 100
 
 def mutatePiece(currentPiece, chordProgression):
+    # changes values within currentPiece
     measures_to_change = set()
     attempts = 0
 
