@@ -17,11 +17,23 @@ class GANote:
     def mutate(self):
         pass
 
+    def is_rest(self):
+        return self.midi_note is None
+
+    def clone(self, new_midi_note=-1, new_duration=-1):
+        if new_midi_note == -1:
+            new_midi_note = self.midi_note
+
+        if new_duration == -1:
+            new_duration = self.duration
+
+        return GANote(new_midi_note, new_duration)
+
 def evaluatePieceFitness(originalPiece, currentPiece, chordProgression):
     pass
 
-def mutatePiece(currentPiece, chordProgression):
-    pass
+def getNonRestNotes(measure):
+    return [i for i in range(len(measure)) if not measure[i].is_rest()]
 
-def combinePieces(firstPiece, secondPiece):
-    pass
+def isMeasureSilent(measure):
+    return len(getNonRestNotes(measure)) == 0

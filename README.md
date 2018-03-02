@@ -14,7 +14,7 @@ Using Genetic Algorithms to improvise
     * 2b. 0.125 probability of transposing up/down a whole note
         * 0.5 up, 0.5 down
     * 3a. 0.25 (1 - quanta/4) probability of becoming leading note, chromatic up or down depending on beat?
-        * quanta = 1 for quarter note, .5 for eighth, etc.
+        * quanta = 1 for quarter note, .5 for eighth, etc.  
     * 3b. 0.25 * (quanta/4) probability of becoming split
         * 0.5 prob of even split
         * 0.25 of triplet
@@ -23,7 +23,7 @@ Using Genetic Algorithms to improvise
             * 0.5 of long beat first
         * apply rules 1,2,4, 7 to new notes
         * apply some min/max, where quanta turns to 0 if it's sixteenth note, also no triplet splitting
-    * 4. 0.10 probability of picking note from bar with same chord progression
+    * 4. 0.05 probability of picking note from bar with same chord progression
         * if no such bars exist, we reweight and ignore this possibility
     * 5. 0.05 probability of shifting all notes
         * 0.5 of going to right, 0.5 of going to left
@@ -31,6 +31,7 @@ Using Genetic Algorithms to improvise
         * 0.5 of just shuffling notes themselves
         * 0.5 of shuffling notes + rhythmic structure
     * 7. 0.05 probability of dropping note
+    * 8. 0.05 probability of swapping notes
 * Crossover ideas
     * split/join
         * Take half of bar and combine to half of other bar
@@ -45,6 +46,7 @@ Using Genetic Algorithms to improvise
     * dock points for having 0 notes from chord progression
     * dock points for only having notes from chord progression
     * dock points for too many jumps
+    * dock points if duration is wonky number
 
 Other thoughts
 * add inversions to chords
