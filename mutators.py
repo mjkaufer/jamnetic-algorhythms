@@ -110,6 +110,9 @@ def copyNoteFromSimilarChord(currentPiece, chordProgression, measureIndex, noteI
     similar_index = choice(measure_indices_with_same_chord)
     note_possibilities = getNonRestNotes(currentPiece[similar_index])
 
+    if len(note_possibilities) == 0:
+        return False
+
     currentPiece[measureIndex][noteIndex].midi_note = currentPiece[similar_index][choice(note_possibilities)].midi_note
     return True
 
