@@ -6,10 +6,16 @@ from random import random, choice, shuffle, sample
 
 def pickRandomChordTone(currentPiece, chordProgression, measureIndex, noteIndex):
     original_midi_note = currentPiece[measureIndex][noteIndex].midi_note
-    octave = original_midi_note // 12
-    new_midi_note = choice(chordProgression[measureIndex]) + 12 * octave
-    if random() < 0.25 and new_midi_note > 12:
+
+    new_midi_note = choice(chordProgression[measureIndex])
+
+
+    p = random()
+
+    if p < 0.25 and new_midi_note > 12:
         new_midi_note -= 12
+    elif p < 0.5 and new_midi_note < 256-12:
+        new_midi_note += 12
 
     currentPiece[measureIndex][noteIndex].midi_note = new_midi_note
     return True
@@ -26,7 +32,7 @@ def transposeWholeNote(currentPiece, chordProgression, measureIndex, noteIndex):
     if random() > 0.5:
         transpose *= -1
 
-    currentPiece[measureIndex][noteIndex].midi_note = note.midi_note
+    currentPiece[measureIndex][noteIndex].midi_note = note.midi_note + transpose
     return True
 
 def becomeLeadingNote(currentPiece, chordProgression, measureIndex, noteIndex):
@@ -61,14 +67,14 @@ def subdivide(currentPiece, chordProgression, measureIndex, noteIndex):
 
     if p < 0.5:
         # even subdivision
-        note_array = [note.clone(note.duration / 2.0), note.clone(note.duration / 2.0)]
+        note_array = [note.clone(new_duration=note.duration / 2.0), note.clone(new_duration=note.duration / 2.0)]
     elif p < 0.75:
         # triplet
-        note_array = [note.clone(note.duration / 3.0), note.clone(note.duration / 3.0), note.clone(note.duration / 3.0)]
+        note_array = [note.clone(new_duration=note.duration / 3.0), note.clone(new_duration=note.duration / 3.0), note.clone(new_duration=note.duration / 3.0)]
     else:
         # dotted
-        long_note = note.clone(note.duration * 0.75)
-        short_note = note.clone(note.duration * 0.25)
+        long_note = note.clone(new_duration=note.duration * 0.75)
+        short_note = note.clone(new_duration=note.duration * 0.25)
 
         if random() < 0.5:
             note_array = [long_note, short_note]
