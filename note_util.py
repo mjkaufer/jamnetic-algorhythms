@@ -13,4 +13,15 @@ class GANote:
         self.midi_note = midi_note
         self.duration = duration
 
-    # TODO, add mutation functions
+    # TODO, fill in mutation function
+    def mutate(self):
+        pass
+
+def evaluatePieceFitness(originalPiece, currentPiece, chordProgression):
+    pass
+
+def mutatePiece(currentPiece, chordProgression):
+    pass
+
+def combinePieces(firstPiece, secondPiece):
+    pass
