@@ -8,7 +8,7 @@ M7  = [0, 4, 7, 11]
 d9  = [0, 4, 7, 10, 14]
 d13 = [0, 4, 7, 10, 14, 17, 21]
 
-root_c = 60
+root_c = 72
 
 
 C6  = transpose(M6, root_c)
@@ -54,7 +54,7 @@ piece = [
     # A section
     [N(root_c, q * d), N(root_c - 5, e), N(root_c - 8, h)],
     [N(root_c - 8, h), N(root_c, t), N(root_c + 2, t), N(root_c, t)],
-    [N(root_c - 2, q * d), N(root_c - 4, e), N(root_c - 8, h)],
+    [N(root_c - 1, q * d), N(root_c - 4, e), N(root_c - 8, h)],
     [N(root_c - 8, w)],
 
     [N(root_c - 3, q * d), N(root_c - 5, e), N(root_c - 8, h)],
@@ -70,12 +70,12 @@ piece = [
     [N(root_c - 1, q * d), N(root_c - 2, e), N(root_c - 3, h)],
     [N(root_c - 3, h), N(root_c - 3, t), N(root_c + 2, t), N(root_c - 1, t)],
     [N(root_c - 3, w)],
-    [N(root_c - 3, w)],
+    [N(root_c - 1, w)],
 
     # B section
     [N(root_c, q * d), N(root_c - 5, e), N(root_c - 8, h)],
     [N(root_c - 8, h), N(root_c, t), N(root_c + 2, t), N(root_c, t)],
-    [N(root_c - 2, q * d), N(root_c - 4, e), N(root_c - 8, h)],
+    [N(root_c - 1, q * d), N(root_c - 4, e), N(root_c - 8, h)],
     [N(root_c - 8, w)],
 
     [N(root_c - 3, q * d), N(root_c - 5, e), N(root_c - 8, h)],
