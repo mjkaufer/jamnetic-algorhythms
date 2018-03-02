@@ -29,6 +29,9 @@ class GANote:
 
         return GANote(new_midi_note, new_duration)
 
+    def __repr__(self):
+        return str(self.midi_note) + ':' + str(self.duration)
+
 def evaluatePieceFitness(originalPiece, currentPiece, chordProgression):
     pass
 

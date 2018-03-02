@@ -26,7 +26,7 @@ def transposeWholeNote(currentPiece, chordProgression, measureIndex, noteIndex):
     if random() > 0.5:
         transpose *= -1
 
-    currentPiece[measureIndex][noteIndex] = note.midi_note
+    currentPiece[measureIndex][noteIndex].midi_note = note.midi_note
     return True
 
 def becomeLeadingNote(currentPiece, chordProgression, measureIndex, noteIndex):
