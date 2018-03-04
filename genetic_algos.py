@@ -155,11 +155,15 @@ def fitness(currentPiece, chordProgression, originalPiece):
     return points
 
 def combinePieces(firstPiece, secondPiece):
-    l = len(firstPiece) // 2
-    return [
-        firstPiece[:l] + secondPiece[l:],
-        secondPiece[:l] + firstPiece[l:]
+    split_index = int(random() * (len(firstPiece) - 2) + 1)
+
+
+    halvsies = [
+        firstPiece[:split_index] + secondPiece[split_index:],
+        secondPiece[:split_index] + firstPiece[split_index:]
     ]
+
+    return halvsies + quartzies
 
 def generation(population, chordProgression, originalPiece, badPercentage=0.1):
 
