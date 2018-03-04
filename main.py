@@ -1,42 +1,31 @@
-from midiutil.MidiFile import MIDIFile
 from random import seed
+from copy import deepcopy
 
 from all_of_me import piece, chord_progression
-from genetic_algos import mutatePiece
+from genetic_algos import generation
+from note_util import writePiece
 
 # currently just mutating, no fitness
 
-seed_num = 100
-iter_count = 100
+seed_num = 18
+iter_count = 400
 
 seed(seed_num)
 
+population_size = 20
+original_piece = deepcopy(piece)
 
-for i in range(iter_count):
+population = [deepcopy(piece) for i in range(population_size)]
 
-    mf = MIDIFile(1)
-    track = 0
-    time = 0
-    bpm = 120
 
-    mf.addTrackName(track, time, "Genetic Algos")
-    mf.addTempo(track, time, bpm)
+for gen_num in range(iter_count):
 
-    # add some notes
-    channel = 0
-    volume = 100
+    population = generation(population, chord_progression, piece)
+    title = 'All of Me ft. Genetic Algos, Gen {}'.format(gen_num)
 
-    for measure in piece:
-        for note in measure:
-            if note.midi_note is not None:
-                mf.addNote(track, channel, note.midi_note, time, note.duration, volume)        
+    for index in [0, len(population) - 1]:
+        fname = './pieces/Gen{}-Rank-{}-Seed{}.mid'.format(gen_num, index, seed_num)
+        
+        writePiece(population[index], title, fname)
 
-            time += note.duration
-
-    fname = "./pieces/{}-{}.mid".format(seed_num, i)
-
-    with open(fname, 'wb') as outf:
-        mf.writeFile(outf)
-        print("Writing to", fname)
-
-    mutatePiece(piece, chord_progression)
+    

@@ -1,3 +1,5 @@
+from midiutil.MidiFile import MIDIFile
+
 def transpose(chord, root_note_midi):
     new_chord = []
     for note in chord:
@@ -32,6 +34,13 @@ class GANote:
     def __repr__(self):
         return str(self.midi_note) + ':' + str(self.duration)
 
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            # do an absolute value comparison for floating point error
+            return self.midi_note == other.midi_note and abs(self.duration - other.duration) <= 1e-7
+
+        return False
+
 def evaluatePieceFitness(originalPiece, currentPiece, chordProgression):
     pass
 
@@ -40,3 +49,27 @@ def getNonRestNotes(measure):
 
 def isMeasureSilent(measure):
     return len(getNonRestNotes(measure)) == 0
+
+def writePiece(piece, title='Genetic Algos', filename='./pieces/untitled.mid', bpm=120, debug=False):
+    mf = MIDIFile(1)
+    track = 0
+    time = 0
+
+    mf.addTrackName(track, time, title)
+    mf.addTempo(track, time, bpm)
+
+    # add some notes
+    channel = 0
+    volume = 100
+
+    for measure in piece:
+        for note in measure:
+            if note.midi_note is not None:
+                mf.addNote(track, channel, note.midi_note, time, note.duration, volume)        
+
+            time += note.duration
+
+    with open(filename, 'wb') as outf:
+        mf.writeFile(outf)
+        if debug:
+            print("Writing to", fname)
