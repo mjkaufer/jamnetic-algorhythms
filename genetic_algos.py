@@ -158,12 +158,10 @@ def combinePieces(firstPiece, secondPiece):
     split_index = int(random() * (len(firstPiece) - 2) + 1)
 
 
-    halvsies = [
+    return [
         firstPiece[:split_index] + secondPiece[split_index:],
         secondPiece[:split_index] + firstPiece[split_index:]
     ]
-
-    return halvsies + quartzies
 
 def generation(population, chordProgression, originalPiece, badPercentage=0.1):
 
