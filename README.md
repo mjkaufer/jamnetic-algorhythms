@@ -50,9 +50,11 @@ More to come
     * dock points for having 0 notes from chord progression
     * dock points for only having notes from chord progression
     * dock points for too many jumps
-    * dock points if duration is wonky number
-
+    * dock points if first note is an ugly interval off chord root (half step, 6 half steps, ignoring notes where it should belong like a maj7 / m7b5)
 Other thoughts
 * add inversions to chords
 * consider weighting everything based on quanta & 1-quanta
 * have a corpus of jazz standards to borrow phrases from
+* add different improvs of all of me to the initial population
+* dock points if duration is wonky number
+* plus points for repitition of musical phrases / rhythmic combinations?

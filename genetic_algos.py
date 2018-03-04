@@ -98,7 +98,8 @@ def fitness(currentPiece, chordProgression, originalPiece):
         min_note = 256
         max_note = -1
 
-        for note in measure:
+        for note_index in range(len(measure)):
+            note = measure[note_index]
             midi_note = note.midi_note
 
             if midi_note is not None:
@@ -110,13 +111,26 @@ def fitness(currentPiece, chordProgression, originalPiece):
                 min_note = min(min_note, midi_note)
                 max_note = min(max_note, midi_note)
 
+                # if the note is the first note and it doesn't belong
+                # make sure we're not unjustly penalizing a maj7 / m7b5
+                if note_index == 0 and (midi_note % 12) not in chord_tones:
+                    first_note_and_chord_root_delta = abs((midi_note % 12) - chord_tones[0])
+
+                    # if the first note is an ugly interval from the chord's root
+                    if first_note_and_chord_root_delta == 1 or first_note_and_chord_root_delta == 6:
+                        points -= 0.5
+
         # if just the same note is played
         if len(distinct_notes) <= 1:
             points -= 1
 
+        # if the only note is a whole note, smh
+        if measure[0].duration == 4:
+            points -= 1.5
+
         # if there are literally notes from the chord
         if num_chord_tones == 0:
-            points -= 1
+            points -= 2
 
         # if literally nothing has changed between mutated piece and original;
         # we can use equality here because GANote overrides default equality comparator
@@ -131,9 +145,9 @@ def fitness(currentPiece, chordProgression, originalPiece):
             if note_delta > 12:
                 points -= 1
 
-            # if there's a two octave jump, dock another point
+            # if there's a two octave jump, dock another point and a half
             if note_delta > 24:
-                points -= 1
+                points -= 1.5
         else:
             # this means that no real notes were logged at all, aka the measure was just silence
             points -= 2
