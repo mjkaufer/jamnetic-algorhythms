@@ -91,6 +91,6 @@ piece = [
     [N(root_c, h), N(root_c - 3, q), N(root_c, q)],
     [N(root_c + 4, h), N(root_c + 4, h)],
     [N(root_c, h), N(root_c + 3, h)],
-    [N(root_c + 2, h * d), N(root_c - 3, e), N(root_c - 5, h)]
+    [N(root_c + 2, q * d), N(root_c - 3, e), N(root_c - 5, h)]
        
 ]
