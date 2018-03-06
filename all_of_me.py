@@ -62,7 +62,7 @@ piece = [
     [N(root_c - 5, h), N(root_c - 7, h)],
     [N(root_c - 7, w)],
 
-    [N(root_c - 8, q * e), N(root_c - 9, e), N(root_c - 10, h)],
+    [N(root_c - 8, q * d), N(root_c - 9, e), N(root_c - 10, h)],
     [N(root_c - 10, h), N(root_c - 8, t), N(root_c - 4, t), N(root_c - 1, t)],
     [N(root_c + 2, h), N(root_c, h)],
     [N(root_c, w)],
