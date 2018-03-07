@@ -1,4 +1,4 @@
-from random import random, choices
+from random import random, choices, sample
 from copy import deepcopy
 
 from mutators import pickRandomChordTone, copyNoteInMeasure, transposeWholeNote, becomeLeadingNote, subdivide, copyNoteFromSimilarChord, shiftNotes, shuffleNotes, dropNote, swapNotes
@@ -115,10 +115,26 @@ def fitness(currentPiece, chordProgression, originalPiece):
                 # make sure we're not unjustly penalizing a maj7 / m7b5
                 if note_index == 0 and (midi_note % 12) not in chord_tones:
                     first_note_and_chord_root_delta = abs((midi_note % 12) - chord_tones[0])
+                    points -= 0.5
 
                     # if the first note is an ugly interval from the chord's root
                     if first_note_and_chord_root_delta == 1 or first_note_and_chord_root_delta == 6:
-                        points -= 0.5
+                        points -= 1
+
+                # if the last note doesn't have a value from the next chord in it
+                if note_index == len(measure) - 1 and measure_index < len(currentPiece) - 1:
+                    next_measure_chord_tones = [next_measure_chord_note % 12 for next_measure_chord_note in chordProgression[measure_index + 1]]
+
+                    # last_note_and_next_chord_root_delta = abs((midi_note % 12) - next_measure_chord_tones[0])
+
+                    # if the leading note to the next chord is the root note of the next chord, which usually sounds trash
+                    if midi_note % 12 == next_measure_chord_tones[0]:
+                        points -= 1.5
+                    # if there's not a nice leading note to the next chord
+                    # used to look at stuff like if it's a half step from the root chord tone, but that's redundant
+                    # bc most jazz pieces have the 7th in them, so we might have a m7 note lead to a maj7 chord
+                    elif not (midi_note % 12 in next_measure_chord_tones):
+                        points -= 0.25
 
         # if just the same note is played
         if len(distinct_notes) <= 1:
@@ -128,9 +144,9 @@ def fitness(currentPiece, chordProgression, originalPiece):
         if measure[0].duration == 4:
             points -= 1.5
 
-        # if there are literally notes from the chord
+        # if there are literally no notes from the chord
         if num_chord_tones == 0:
-            points -= 2
+            points -= (1 + len(getNonRestNotes(measure)))
 
         # if literally nothing has changed between mutated piece and original;
         # we can use equality here because GANote overrides default equality comparator
@@ -152,16 +168,36 @@ def fitness(currentPiece, chordProgression, originalPiece):
             # this means that no real notes were logged at all, aka the measure was just silence
             points -= 2
 
+        if measure_index > 0:
+            prev_measure = currentPiece[measure_index - 1]
+
+            # if there are really big jumps between measures
+            if not isMeasureSilent(measure) and not isMeasureSilent(prev_measure) and max(abs(min(prev_measure).midi_note - max(measure).midi_note), abs(max(prev_measure).midi_note - min(measure).midi_note)) > 17:
+                points -= 0.5
+
+        if measure_index < len(currentPiece) - 1:
+            next_measure = currentPiece[measure_index + 1]
+
+            # if there are really big jumps between measures
+            if not isMeasureSilent(measure) and not isMeasureSilent(next_measure) and max(abs(min(next_measure).midi_note - max(measure).midi_note), abs(max(next_measure).midi_note - min(measure).midi_note)) > 17:
+                points -= 0.5
+
+
+
     return points
 
 def combinePieces(firstPiece, secondPiece):
-    split_index = int(random() * (len(firstPiece) - 2) + 1)
+    split_indices = sample(range(len(firstPiece)), min(6, len(firstPiece) // 1.5))
 
+    results = []
 
-    return [
-        firstPiece[:split_index] + secondPiece[split_index:],
-        secondPiece[:split_index] + firstPiece[split_index:]
-    ]
+    for split_index in split_indices:
+        results += [
+            firstPiece[:split_index] + secondPiece[split_index:],
+            secondPiece[:split_index] + firstPiece[split_index:]
+        ]
+
+    return results
 
 def generation(population, chordProgression, originalPiece, badPercentage=0.1):
 

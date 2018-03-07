@@ -41,6 +41,50 @@ class GANote:
 
         return False
 
+    def __radd__(self, other):
+        # so we can call sum(measure) and get a value which represents the measure duration
+        # this should always be around 4
+
+        if isinstance(other, int) or isinstance(other, float):
+            return self.duration + other
+        else:
+            return self.duration + other.duration
+
+    def __lt__(self, other):
+        if self is None or self.midi_note is None:
+            return False
+        if other is None or other.midi_note is None:
+            return True
+
+        return self.midi_note < other.midi_note
+
+    def __le__(self, other):
+        if self is None or self.midi_note is None:
+            return False
+        if other is None or other.midi_note is None:
+            return True
+
+        return self.midi_note <= other.midi_note
+
+    def __gt__(self, other):
+        if self is None or self.midi_note is None:
+            return False
+        if other is None or other.midi_note is None:
+            return True
+
+        return self.midi_note > other.midi_note
+
+    def __ge__(self, other):
+        if self is None or self.midi_note is None:
+            return False
+        if other is None or other.midi_note is None:
+            return True
+
+        return self.midi_note >= other.midi_note
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 def evaluatePieceFitness(originalPiece, currentPiece, chordProgression):
     pass
 
