@@ -69,7 +69,7 @@ def mutatePiece(currentPiece, chordProgression, copy=True):
 def mutateMeasure(currentPiece, chordProgression, measureIndex, noteIndex):
     p = random()
 
-    quanta = currentPiece[measureIndex][noteIndex].duration / 4.0
+    quanta = (currentPiece[measureIndex][noteIndex].duration / 4.0) ** 1.5
 
     enable_become_leading = 0
     # issues with becoming leading note bc note being lead to often changes
@@ -115,11 +115,11 @@ def fitness(currentPiece, chordProgression, originalPiece):
                 # make sure we're not unjustly penalizing a maj7 / m7b5
                 if note_index == 0 and (midi_note % 12) not in chord_tones:
                     first_note_and_chord_root_delta = abs((midi_note % 12) - chord_tones[0])
-                    points -= 0.5
+                    points -= 1
 
                     # if the first note is an ugly interval from the chord's root
                     if first_note_and_chord_root_delta == 1 or first_note_and_chord_root_delta == 6:
-                        points -= 1
+                        points -= 1.5
 
                 # if the last note doesn't have a value from the next chord in it
                 if note_index == len(measure) - 1 and measure_index < len(currentPiece) - 1:
@@ -133,12 +133,14 @@ def fitness(currentPiece, chordProgression, originalPiece):
                     # if there's not a nice leading note to the next chord
                     # used to look at stuff like if it's a half step from the root chord tone, but that's redundant
                     # bc most jazz pieces have the 7th in them, so we might have a m7 note lead to a maj7 chord
-                    elif not (midi_note % 12 in next_measure_chord_tones):
-                        points -= 0.25
+
+                    # # temporarily comment this out
+                    # elif not (midi_note % 12 in next_measure_chord_tones):
+                    #     points -= 0.25
 
         # if just the same note is played
         if len(distinct_notes) <= 1:
-            points -= 1
+            points -= 0.5
 
         # if the only note is a whole note, smh
         if measure[0].duration == 4:
@@ -146,7 +148,7 @@ def fitness(currentPiece, chordProgression, originalPiece):
 
         # if there are literally no notes from the chord
         if num_chord_tones == 0:
-            points -= (1 + len(getNonRestNotes(measure)))
+            points -= (1 + len(getNonRestNotes(measure)) * 1.5)
 
         # if literally nothing has changed between mutated piece and original;
         # we can use equality here because GANote overrides default equality comparator
