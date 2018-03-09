@@ -94,3 +94,6 @@ piece = [
     [N(root_c + 2, q * d), N(root_c - 3, e), N(root_c - 5, h)]
        
 ]
+
+def getPiece():
+    return (piece, chord_progression, 'All of Me')
