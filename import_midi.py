@@ -1,10 +1,18 @@
 import sys
 
-if len(sys.argv) != 2:
-    print("Usage is python import_midi.py <midi file>")
+def exit(reason=None):
+    if reason is not None:
+        print(reason)
+    print("Exiting")
     sys.exit(0)
 
+if len(sys.argv) != 2:
+    exit("Usage is python import_midi.py <midi file>")
+    
+
 filename = sys.argv[1]
+
+bpm = None
 
 with open(filename, 'rb') as f:
     byte = 'ignore'
@@ -21,3 +29,6 @@ with open(filename, 'rb') as f:
             
             bpm = round(234000 / int(next_bytes, 16))
             print("bpm is", bpm)
+
+if bpm is None:
+    exit("No BPM set in your midi - please add one")
