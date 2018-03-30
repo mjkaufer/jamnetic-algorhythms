@@ -94,7 +94,7 @@ def getNonRestNotes(measure):
 def isMeasureSilent(measure):
     return len(getNonRestNotes(measure)) == 0
 
-def writePiece(piece, title='Genetic Algos', filename='./pieces/untitled.mid', bpm=120, debug=False):
+def writePiece(piece, chord_progression, title='Genetic Algos', filename='./pieces/untitled.mid', bpm=120, debug=False):
     mf = MIDIFile(1)
     track = 0
     time = 0
@@ -104,12 +104,20 @@ def writePiece(piece, title='Genetic Algos', filename='./pieces/untitled.mid', b
 
     # add some notes
     channel = 0
+    chord_channel = 1
     volume = 100
 
-    for measure in piece:
+    for i in range(len(piece)):
+        measure = piece[i]
+        chord = chord_progression[i]
+
+        for note in chord:
+            mf.addNote(track, chord_channel, note - 12, time, 1, volume // 2)
+
         for note in measure:
             if note.midi_note is not None:
-                mf.addNote(track, channel, note.midi_note, time, note.duration, volume)        
+                mf.addNote(track, channel, note.midi_note, time, note.duration, volume)
+
 
             time += note.duration
 

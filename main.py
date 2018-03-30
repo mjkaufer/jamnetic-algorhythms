@@ -31,13 +31,13 @@ if len(sys.argv) == 0:
     print("FYI, usage is python main.py <seed number> <number of generations>")
     print("Don't worry, we'll use the default values for you")
 
-if len(sys.argv) >= 1:
+if len(sys.argv) > 1:
     try:
         seed_num = int(sys.argv[1])
     except ValueError:
         print("Invalid seed param; using {} instead".format(seed_num))
 
-if len(sys.argv) >= 2:
+if len(sys.argv) > 2:
     try:
         iter_count = int(sys.argv[2])
     except ValueError:
@@ -53,7 +53,7 @@ original_piece = deepcopy(piece)
 population = [deepcopy(piece) for i in range(population_size)]
 # print([sum(measure) for measure in original_piece])
 
-writePiece(piece, 'init', 'init.mid')
+writePiece(piece, chord_progression, 'init', 'init.mid')
 
 for gen_num in range(iter_count):
 
@@ -63,6 +63,6 @@ for gen_num in range(iter_count):
     for index in [0, len(population) - 1]:
         fname = './pieces/Seed{}-Gen{}-Rank{}.mid'.format(seed_num, gen_num, index)
         
-        writePiece(population[index], title, fname)
+        writePiece(population[index], chord_progression, title, fname)
 
     
