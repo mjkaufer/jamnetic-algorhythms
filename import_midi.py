@@ -1,4 +1,6 @@
 import sys
+import pretty_midi
+import note_util
 
 def exit(reason=None):
     if reason is not None:
@@ -32,3 +34,16 @@ with open(filename, 'rb') as f:
 
 if bpm is None:
     exit("No BPM set in your midi - please add one")
+
+
+midi_stream = pretty_midi.PrettyMIDI(filename)
+notes = midi.instruments[0].notes
+
+def updateNoteEndTime(pretty_midi_note):
+
+    # slight underestimate, but better to be too short in measure than too long
+    decay_constant = 1.05
+
+    delta = pretty_midi_note.end - pretty_midi_note.start
+    pretty_midi_note.end = delta * decay_constant + pretty_midi_note.start
+

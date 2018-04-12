@@ -6,7 +6,7 @@ from copy import deepcopy
 # from blue_bossa import piece, chord_progression as blue_bossa_piece, blue_bossa_chords
 # from all_of_me import getPiece as allOfMe
 # from blue_bossa import getPiece as blueBossa
-import all_of_me, blue_bossa
+import all_of_me, blue_bossa, another_day_of_sun, minor_swing, fly_me_to_the_moon
 
 from genetic_algos import generation
 from note_util import writePiece
@@ -16,12 +16,15 @@ iter_count = 100
 
 pieces = [
     all_of_me.getPiece(),
-    blue_bossa.getPiece()
+    blue_bossa.getPiece(),
+    another_day_of_sun.getPiece(),
+    minor_swing.getPiece(),
+    fly_me_to_the_moon.getPiece()
     # (all_of_me.piece, all_of_me.chord_progression, "All of Me"),
     # (blue_bossa.piece, blue_bossa.chord_progression, "Blue Bossa")
 ]
 
-piece_num = 0
+piece_num = 4
 
 piece, chord_progression, piece_title = pieces[piece_num]
 
@@ -51,7 +54,6 @@ population_size = 20
 original_piece = deepcopy(piece)
 
 population = [deepcopy(piece) for i in range(population_size)]
-# print([sum(measure) for measure in original_piece])
 
 writePiece(piece, chord_progression, 'init', 'init.mid')
 

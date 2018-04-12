@@ -1,2 +1,3 @@
 midiutil
 pretty_midi
+music21

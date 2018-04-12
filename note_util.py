@@ -1,4 +1,6 @@
+from random import sample
 from midiutil.MidiFile import MIDIFile
+import sys
 
 def transpose(chord, root_note_midi):
     new_chord = []
@@ -94,7 +96,7 @@ def getNonRestNotes(measure):
 def isMeasureSilent(measure):
     return len(getNonRestNotes(measure)) == 0
 
-def writePiece(piece, chord_progression, title='Genetic Algos', filename='./pieces/untitled.mid', bpm=120, debug=False):
+def writePiece(piece, chord_progression, title='Genetic Algos', filename='./pieces/untitled.mid', bpm=120, debug=False, with_chords=True, with_shell_chords=True):
     mf = MIDIFile(1)
     track = 0
     time = 0
@@ -111,8 +113,14 @@ def writePiece(piece, chord_progression, title='Genetic Algos', filename='./piec
         measure = piece[i]
         chord = chord_progression[i]
 
-        for note in chord:
-            mf.addNote(track, chord_channel, note - 12, time, 1, volume // 2)
+        if with_chords:
+            if with_shell_chords and len(chord) >= 4:
+                # third and seventh
+                mf.addNote(track, chord_channel, chord[1] - 24, time, 1, volume // 2)
+                mf.addNote(track, chord_channel, chord[3] - 24, time, 1, volume // 2)
+            else:
+                for note in chord:
+                    mf.addNote(track, chord_channel, note - 24, time, 1, volume // 2)
 
         for note in measure:
             if note.midi_note is not None:
@@ -122,6 +130,11 @@ def writePiece(piece, chord_progression, title='Genetic Algos', filename='./piec
             time += note.duration
 
     with open(filename, 'wb') as outf:
-        mf.writeFile(outf)
+        try:
+            mf.writeFile(outf)
+        except IndexError:
+            print("BAD PIECE")
+            print(piece)
+            sys.exit(0)
         if debug:
             print("Writing to", fname)
