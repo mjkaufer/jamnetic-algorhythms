@@ -24,9 +24,16 @@ pieces = [
     # (blue_bossa.piece, blue_bossa.chord_progression, "Blue Bossa")
 ]
 
-piece_num = 4
+piece_num = 2
+
+# piece_indices_to_double = [2]
+piece_indices_to_double = []
 
 piece, chord_progression, piece_title = pieces[piece_num]
+
+if piece_num in piece_indices_to_double:
+    piece = deepcopy(piece * 2)
+    chord_progression = deepcopy(chord_progression * 2)
 
 print(piece_title)
 

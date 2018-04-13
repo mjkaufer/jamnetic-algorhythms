@@ -1,9 +1,15 @@
 # Jamnetic Algorhythms
 Using Genetic Algorithms to improvise
 
-## Usage
+## Setup
 Must use python 3.6
-More to come
+
+* Run `pip install -r requirements.txt` (or `pip3` if you don't have a virtualenv set up)
+* Run `python main.py` or `python3 main.py`
+* The pieces will be written out to `/pieces`
+    * To change the piece being generated, modify the `piece_num` variable to represent the index you want
+
+To add your own pieces, observe `minor_swing.py` and replace the `mxl` file with your musicxml file, and the chord progression with a corresponding chord progression. Then, import your new python file into `main.py`
 
 ## Algorithm Thoughts
 * GAs for jazz standard - all of me
