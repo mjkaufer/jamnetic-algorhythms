@@ -82,8 +82,82 @@ def mutateMeasure(currentPiece, chordProgression, measureIndex, noteIndex):
 
     return mutator(currentPiece, chordProgression, measureIndex, noteIndex)
 
-def fitness(currentPiece, chordProgression, originalPiece):
+def generateMeasureContour(measure, last_midi=None):
+    # [[normalized same, normalized (half/whole)steps up, normalized (half/whole)steps down, normalized leaps up, normalized leaps down], ...]
+    current_measure_contour = [0, 0, 0, 0, 0]
+
+    for note in measure:
+        if last_midi is not None and note.midi_note is not None:
+            d = note.midi_note - last_midi
+
+            index = 0
+
+            if 0 < abs(d) <= 2:
+                if d > 0:
+                    index = 1
+                else:
+                    index = 2
+            elif abs(d) > 2:
+                if d > 0:
+                    index = 3
+                else:
+                    index = 4
+
+            current_measure_contour[index] += 1
+
+        last_midi = note.midi_note
+
+    return last_midi, normalize(current_measure_contour)
+
+
+def distSquared(a, b):
+    d = 0
+
+    for i in range(len(a)):
+        d += (a[i] - b[i]) ** 2
+
+    return d
+
+def normalize(a):
+    d = distSquared(a, [0] * len(a)) ** 0.5
+
+    if d == 0:
+        return a
+
+    return [i / d for i in a]
+
+def contourDistanceSquared(countour_a, countour_b):
+    distance_squared = 0
+
+    for i in range(len(countour_a)):
+        a = countour_a[i]
+        b = countour_b[i]
+
+        distance_squared += distSquared(a, b)
+
+    return distance_squared
+
+def generatePieceContour(piece):
+
+    last_midi = None
+
+    contour = []
+
+    for measure in piece:
+        last_midi, current_measure_contour = generateMeasureContour(measure, last_midi)
+        contour.append(current_measure_contour)
+
+    return contour
+
+def fitness(currentPiece, chordProgression, originalPiece, originalContour=None):
     points = 0
+
+    if originalContour is None:
+        originalContour = generatePieceContour(originalPiece)
+
+    new_contour = generatePieceContour(currentPiece)
+
+    points -= contourDistanceSquared(originalContour, new_contour) / len(originalContour)
 
     for measure_index in range(len(currentPiece)):
 
@@ -207,7 +281,9 @@ def generation(population, chordProgression, originalPiece, badPercentage=0.1):
 
     mutated_pieces = [mutatePiece(current_piece, chordProgression) for current_piece in population]
 
-    mutated_pieces.sort(key=lambda piece: -1 * fitness(piece, chordProgression, originalPiece))
+    contour = generatePieceContour(originalPiece)
+
+    mutated_pieces.sort(key=lambda piece: -1 * fitness(piece, chordProgression, originalPiece, contour))
 
     spliced_pieces = []
 
@@ -219,7 +295,7 @@ def generation(population, chordProgression, originalPiece, badPercentage=0.1):
     for i in range(0, len(mutated_pieces) // 2):
         spliced_pieces += combinePieces(mutated_pieces[i], mutated_pieces[len(mutated_pieces) - 1 - i])
 
-    spliced_pieces.sort(key=lambda piece: -1 * fitness(piece, chordProgression, originalPiece))
+    spliced_pieces.sort(key=lambda piece: -1 * fitness(piece, chordProgression, originalPiece, contour))
 
 
     num_bad = int(generation_size * badPercentage)
