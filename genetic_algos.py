@@ -110,11 +110,19 @@ def generateMeasureContour(measure, last_midi=None):
     return last_midi, normalize(current_measure_contour)
 
 
-def distSquared(a, b):
+def distSquared(a, b, backwards=False):
     d = 0
 
     for i in range(len(a)):
-        d += (a[i] - b[i]) ** 2
+        opposite_index = i
+
+        # 1 -> 2, 2 -> 1, 3 -> 4, 4 -> 3, etc
+        if backwards and i != 0:
+            opposite_index = i + 1
+            if opposite_index % 2 == 1:
+                opposite_index -= 2
+
+        d += (a[i] - b[opposite_index]) ** 2
 
     return d
 
@@ -126,7 +134,8 @@ def normalize(a):
 
     return [i / d for i in a]
 
-def contourDistanceSquared(countour_a, countour_b):
+# if backwards, something with strictly leap increasing is equivalent to something with strictly leap decreasing
+def contourDistanceSquared(countour_a, countour_b, backwards=False):
     distance_squared = 0
 
     for i in range(len(countour_a)):
@@ -134,6 +143,17 @@ def contourDistanceSquared(countour_a, countour_b):
         b = countour_b[i]
 
         distance_squared += distSquared(a, b)
+
+    if backwards:
+        backwards_distance_squared = 0
+
+        for i in range(len(countour_a)):
+            a = countour_a[i]
+            b = countour_b[i]
+
+            backwards_distance_squared += distSquared(a, b, backwards=True)
+
+        distance_squared = min(backwards_distance_squared, distance_squared)
 
     return distance_squared
 
@@ -157,7 +177,7 @@ def fitness(currentPiece, chordProgression, originalPiece, originalContour=None)
 
     new_contour = generatePieceContour(currentPiece)
 
-    points -= contourDistanceSquared(originalContour, new_contour) / len(originalContour)
+    points -= contourDistanceSquared(originalContour, new_contour, True) / len(originalContour) * 0.5
 
     for measure_index in range(len(currentPiece)):
 
@@ -227,7 +247,7 @@ def fitness(currentPiece, chordProgression, originalPiece, originalContour=None)
         # if literally nothing has changed between mutated piece and original;
         # we can use equality here because GANote overrides default equality comparator
         if measure == originalPiece[measure_index]:
-            points -= 1
+            points -= 2
 
         # make sure there was a note to be updated, and the measure wasn't just rests
         if min_note != 256:
