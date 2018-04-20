@@ -240,6 +240,10 @@ def fitness(currentPiece, chordProgression, originalPiece, originalContour=None)
         if measure[0].duration == 4:
             points -= 1.5
 
+        if measure[0].duration < 1 / 8.0:
+            # no 32nd notes pls
+            points -= 2.0
+
         # if there are literally no notes from the chord
         if num_chord_tones == 0:
             points -= (1 + len(getNonRestNotes(measure)) * 1.5)
