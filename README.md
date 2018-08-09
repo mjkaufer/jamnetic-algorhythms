@@ -1,7 +1,7 @@
 # Jamnetic Algorhythms
 Using genetica algorithms to improvise over midi
 
-[![Demo](https://img.youtube.com/vi/dCUEdHQ_gRs/0.jpg)](https://www.youtube.com/watch?v=dCUEdHQ_gRs)
+[![Demo](https://img.youtube.com/vi/-sLRaRC6OZk/0.jpg)](https://www.youtube.com/watch?v=-sLRaRC6OZk)
 
 ## Setup
 Must use python 3.6

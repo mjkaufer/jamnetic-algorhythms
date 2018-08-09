@@ -287,7 +287,7 @@ def fitness(currentPiece, chordProgression, originalPiece, originalContour=None)
     return points
 
 def combinePieces(firstPiece, secondPiece):
-    split_indices = sample(range(len(firstPiece)), min(6, len(firstPiece) // 1.5))
+    split_indices = sample(range(len(firstPiece)), min(6, len(firstPiece) * 3 // 2))
 
     results = []
 

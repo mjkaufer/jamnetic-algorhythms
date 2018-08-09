@@ -119,7 +119,11 @@ def writePiece(piece, chord_progression, title='Genetic Algos', filename='./piec
                 mf.addNote(track, chord_channel, chord[1] - 24, time, 1, volume // 2)
                 mf.addNote(track, chord_channel, chord[3] - 24, time, 1, volume // 2)
             else:
-                for note in chord:
+                for i in range(len(chord)):
+                    if i == 0 and len(chord) > 2:
+                        continue
+                        
+                    note = chord[i]
                     mf.addNote(track, chord_channel, note - 24, time, 1, volume // 2)
 
         for note in measure:

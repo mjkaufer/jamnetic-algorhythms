@@ -6,7 +6,7 @@ from copy import deepcopy
 # from blue_bossa import piece, chord_progression as blue_bossa_piece, blue_bossa_chords
 # from all_of_me import getPiece as allOfMe
 # from blue_bossa import getPiece as blueBossa
-import all_of_me, blue_bossa, another_day_of_sun, minor_swing, fly_me_to_the_moon
+import all_of_me, blue_bossa, another_day_of_sun, minor_swing, fly_me_to_the_moon, mary, cantina
 
 from genetic_algos import generation
 from note_util import writePiece
@@ -19,12 +19,15 @@ pieces = [
     blue_bossa.getPiece(),
     another_day_of_sun.getPiece(),
     minor_swing.getPiece(),
-    fly_me_to_the_moon.getPiece()
+    fly_me_to_the_moon.getPiece(),
+    mary.getPiece(),
+    cantina.getPiece()
     # (all_of_me.piece, all_of_me.chord_progression, "All of Me"),
     # (blue_bossa.piece, blue_bossa.chord_progression, "Blue Bossa")
 ]
 
-piece_num = 2
+# piece_num = 2
+piece_num = -1
 
 # piece_indices_to_double = [2]
 piece_indices_to_double = []
